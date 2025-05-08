@@ -1,0 +1,107 @@
+import numpy as np
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import silhouette_score
+from sklearn.cluster import KMeans
+
+#Membuat variabel untuk menyimpan nilai berupa file csv
+df = pd.read_csv('HIV1.csv')
+
+st.header("Isi Dataset")
+st.write(df)
+
+#--------------------------------------------------------------------------------------------------------------------------------#
+# 1. Elbow Method -> untuk menentukan jumlah cluster optimal.
+
+# Data numerik untuk clustering
+numerical_cols = df.select_dtypes(include=['float64', 'int64']).columns
+X = df[numerical_cols]
+
+# Tentukan jumlah cluster yang diuji (misalnya, 2-10)
+inertia = []
+k_range = range(2, 8)
+
+# Iterasi melalui jumlah cluster
+for k in k_range:
+    kmeans = KMeans(n_clusters=k, random_state=42, n_init=10)
+    kmeans.fit(X)
+    inertia.append(kmeans.inertia_)
+
+# Membuat grafik menggunakan Matplotlib
+fig, ax = plt.subplots()
+ax.plot(k_range, inertia, marker='o', linestyle='-', color='orange')
+ax.set_title('Grafik Metode Elbow')
+ax.set_xlabel('Number of clusters k')
+ax.set_ylabel('Total Within Sum of Square')
+ax.set_xticks(k_range)
+ax.grid(True)
+
+# Menandai "elbow" point (secara visual, mungkin tidak otomatis)
+# Berdasarkan grafik contoh, elbow terlihat di k=4
+elbow_point = 4
+plt.axvline(x=elbow_point, color='r', linestyle='--', label=f'Optimal k = {elbow_point}')
+plt.legend()
+plt.show()
+
+# Menampilkan Grafik di Streamlit
+st.pyplot(fig)
+st.write(f'Berdasarkan grafik Elbow, perkiraan jumlah cluster optimal adalah **{elbow_point}**.')
+
+#--------------------------------------------------------------------------------------------------------------#
+# 2. Silhouette Score -> sebagai ukuran kualitas cluster.
+
+# Hitung Silhouette Score untuk berbagai jumlah cluster
+silhouette_scores = []
+for k in range(2, 8):  # Dimulai dari 2 karena 1 cluster tidak memiliki makna
+    kmeans = KMeans(n_clusters=k, random_state=42)
+    labels = kmeans.fit_predict(X)
+    score = silhouette_score(X, labels)
+    silhouette_scores.append(score)
+
+# Visualisasi Silhouette Score
+fig, ax = plt.subplots()
+ax.plot(range(2, 8), silhouette_scores, marker='o', color='orange')
+ax.set_title("Grafik Metode Silhouette Score")
+ax.set_xlabel("Number of clusters k")
+ax.set_ylabel("Average Silhouette Width Score")
+ax.grid(True)
+
+# Menandai titik optimal (berdasarkan nilai tertinggi)
+optimal_k_silhouette = k_range[np.argmax(silhouette_scores)]
+plt.axvline(x=optimal_k_silhouette, color='r', linestyle='--', label=f'Optimal k = {optimal_k_silhouette}')
+plt.legend()
+
+# Menampilkan Grafik di Streamlit
+st.pyplot(fig)
+st.write(f'Berdasarkan grafik Silhouette Score, perkiraan ukuran kualitas jumlah cluster adalah **{optimal_k_silhouette}**.')
+
+#---------------------------------------------------------------------------------------------------#
+# Menampilkan K-Means Clustering dalam bentuk Sliding
+st.sidebar.subheader("Nilai Jumlah K")
+clust = st.sidebar.slider("Pilih Jumlah Cluster :", 2,8,3,1) #Memasukan Slider
+
+#--------------------------------------------------------------------------------------------------------------#
+def k_means(n_clust): # Memasukkan fungsi clusternya berdasarkan Slider
+    kmeans = KMeans(n_clusters=n_clust).fit(df) # Memanggil fungsi K-Means
+    df['Labels']=kmeans.labels_
+ 
+    plt.figure(figsize=(10,8)) # Masukkan Plotnya
+    sns.scatterplot(x='Umur', y='Kelurahan', hue='Labels', data=df, markers=True, 
+                   size='Labels', palette=sns.color_palette('hls', n_clust))
+
+    for label in df['Labels']:
+        plt.annotate(label, 
+            (df[df['Labels']==label]['Umur'].mean(),
+            df[df['Labels']==label]['Kelurahan'].mean()),
+            horizontalalignment ='center',
+            verticalalignment ='center',
+            size = 20, weight='bold',
+            color ='black')
+    
+    st.header('Cluster Plot') # Memanggil Label
+    st.pyplot()
+    st.write(df)
+
+k_means(clust) #dimana clust ini ditentukan oleh slider
