@@ -87,7 +87,6 @@ ax.legend()
 ax.grid(True)
 fig.tight_layout()
 
-
 # Menampilkan Grafik di Streamlit
 st.pyplot(fig)
 st.write(f'Berdasarkan grafik Silhouette Score, perkiraan ukuran kualitas jumlah cluster adalah **{optimal_k}**.')
