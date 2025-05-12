@@ -18,6 +18,7 @@ st.header("Isi Dataset")
 st.write(HIV)
 
 #--------------------------------------------------------------------------------------------------------------------------------#
+# K-Means Clustering
 # 1. Elbow Method -> untuk menentukan jumlah cluster optimal.
 
 # Data numerik untuk clustering
