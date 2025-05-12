@@ -37,7 +37,7 @@ for k in k_range:
 # Membuat grafik menggunakan Matplotlib
 fig, ax = plt.subplots()
 ax.plot(k_range, inertia, marker='o', linestyle='-', color='orange')
-ax.set_title('Grafik Metode Elbow')
+ax.set_title('Metode Elbow')
 ax.set_xlabel('Number of clusters k')
 ax.set_ylabel('Total Within Sum of Square')
 ax.set_xticks(k_range)
