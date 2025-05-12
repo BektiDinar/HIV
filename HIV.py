@@ -51,7 +51,7 @@ plt.legend()
 
 # Menampilkan Grafik di Streamlit
 st.pyplot(fig)
-st.write(f'Berdasarkan grafik Elbow, perkiraan jumlah cluster optimal adalah **{elbow_point}**.')
+st.write(f'Berdasarkan grafik dari metode Elbow, perkiraan jumlah cluster optimal adalah **{elbow_point}**.')
 
 #--------------------------------------------------------------------------------------------------------------#
 # 2. Silhouette Score -> sebagai ukuran kualitas cluster.
@@ -89,7 +89,7 @@ fig.tight_layout()
 
 # Menampilkan Grafik di Streamlit
 st.pyplot(fig)
-st.write(f'Berdasarkan grafik Silhouette Score, perkiraan ukuran kualitas jumlah cluster adalah **{optimal_k}**.')
+st.write(f'Berdasarkan grafik dari metode Silhouette Score, perkiraan ukuran kualitas jumlah cluster adalah **{optimal_k}**.')
 
 #---------------------------------------------------------------------------------------------------#
 # Menampilkan K-Means Clustering dalam bentuk Sliding
