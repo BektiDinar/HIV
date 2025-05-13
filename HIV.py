@@ -14,6 +14,7 @@ from sklearn.preprocessing import StandardScaler
 df = pd.read_csv('HIV1.csv')
 HIV = pd.read_csv('HIV.csv', delimiter=';')
 
+st.title("Aplikasi Data Mining HIV K-Means Clustering\n")
 st.header("Isi Dataset")
 st.write(HIV)
 
@@ -98,16 +99,16 @@ st.sidebar.subheader("Nilai Jumlah K")
 clust = st.sidebar.slider("Pilih Jumlah Cluster :", 2,8,3,1) #Memasukan Slider
 
 #--------------------------------------------------------------------------------------------------------------#
-# Proses Clustering (Scatter Plot)
+# Proses Clustering 
 def k_means(n_clust): # Memasukkan fungsi clusternya berdasarkan Slider
-    kmeans = KMeans(n_clusters=n_clust).fit(df) # Memanggil fungsi K-Means
+    kmeans = KMeans(n_clusters=n_clust).fit(df) # Memanggil fungsi K-Means ke dataset
     df['Labels']=kmeans.labels_
  
      # Buat objek Figure dan Axes
     fig, ax = plt.subplots(figsize=(10, 8)) # Masukkan Plotnya
     ax.set_title('Hasil K-Means Clustering')
 
-    # Scatter plot dengan Seaborn
+    # Visualisasi scatter plot dengan Seaborn
     sns.scatterplot(x='Umur', y='Kelurahan', hue='Labels', data=df, markers=True, 
                    size='Labels', palette=sns.color_palette('hls', n_clust))
     
