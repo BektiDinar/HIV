@@ -104,7 +104,7 @@ def k_means(n_clust): # Memasukkan fungsi clusternya berdasarkan Slider
     kmeans = KMeans(n_clusters=n_clust).fit(df) # Memanggil fungsi K-Means ke dataset
     df['Labels']=kmeans.labels_
  
-     # Buat objek Figure dan Axes
+    # Buat objek Figure dan Axes
     fig, ax = plt.subplots(figsize=(10, 8)) # Masukkan Plotnya
     ax.set_title('Hasil K-Means Clustering')
 
