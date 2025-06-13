@@ -127,5 +127,5 @@ def k_means(n_clust): # Memasukkan fungsi clusternya berdasarkan Slider
     st.header('Cluster Plot') # Memanggil Label
     st.pyplot(fig)
     st.write(df)
-
+    
 k_means(clust) #dimana clust ini ditentukan oleh slider
